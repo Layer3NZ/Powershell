@@ -1,7 +1,7 @@
 # N-Able Uninstaller
 # By Hayden Kirk / Layer3
-# v1.0
-# 15/01/2024
+# v1.1
+# 27/01/2024
 #
 # You can search and use wildcards
 # APPLICATION NAME AND PUBLISHER
@@ -9,6 +9,9 @@
 #
 # You can also use this with -ReadOnly
 # Find-And-ProcessPrograms -softwareMap $softwareMap -ReadOnly
+#
+# Update Log
+# v1.1 - Added the ability to remove the old Automation Manager Service
 
 $softwareMap = @{
     "File Cache Service Agent" = @("MspPlatform")
@@ -70,4 +73,28 @@ function Find-And-ProcessPrograms {
     }
 }
 
+# Remove software
 Find-And-ProcessPrograms -softwareMap $softwareMap
+
+# Remove old automation manager service
+$serviceName = "AutomationManagerAgent"
+
+# Check if the service exists
+$service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+
+if ($service) {
+    Write-Output "Service '$serviceName' found. Attempting to delete..."
+
+    # Attempt to stop the service in case it is running
+    Stop-Service -Name $serviceName -Force -ErrorAction SilentlyContinue
+    
+    # Wait a bit for the service to stop
+    Start-Sleep -Seconds 5
+
+    # Delete the service
+    sc.exe delete $serviceName
+
+    Write-Output "Service '$serviceName' has been deleted."
+} else {
+    Write-Output "Service '$serviceName' does not exist."
+}

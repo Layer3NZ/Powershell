@@ -10,6 +10,9 @@
 # You can also use this with -ReadOnly
 # Find-And-ProcessPrograms -softwareMap $softwareMap -ReadOnly
 #
+# NOTE - THIS DOES NOT UNINSTALL AV-DEFENDER
+# Make sure you set the password to an easy to remember password for AV Defender before removal
+#
 # Update Log
 # v1.1 - Added the ability to remove the old Automation Manager Service
 
